@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const MenuDetailContainer = styled.section`
+const Wrapper = styled.section`
   margin: auto;
   margin-top: ${(props) => props.theme.headerHeight};
   width: clamp(800px, 80%, 1640px);
@@ -84,7 +84,7 @@ const MenuDetail = () => {
   };
 
   return (
-    <MenuDetailContainer>
+    <Wrapper>
       <MenuDescription>
         <h2>{menu.name}</h2>
         <img src={menu.imageUrl} alt="" />
@@ -106,7 +106,7 @@ const MenuDetail = () => {
           <OrderButton>장바구니 추가</OrderButton>
         </form>
       </OrderSection>
-    </MenuDetailContainer>
+    </Wrapper>
   );
 };
 

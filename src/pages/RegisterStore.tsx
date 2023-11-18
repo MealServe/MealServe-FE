@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const RegisterStorePage = styled.div`
+const Wrapper = styled.div`
   background-color: ${(props) => props.theme.colors.bgColor};
   padding-top: 8px;
 
@@ -84,7 +84,7 @@ const InputContainer = styled.div`
 const RegisterStore = () => {
   return (
     <>
-      <RegisterStorePage>
+      <Wrapper>
         <RegisterForm>
           <h1>업장 등록하기</h1>
           <InputContainer>
@@ -98,7 +98,7 @@ const RegisterStore = () => {
           </InputContainer>
           <button>등록</button>
         </RegisterForm>
-      </RegisterStorePage>
+      </Wrapper>
     </>
   );
 };

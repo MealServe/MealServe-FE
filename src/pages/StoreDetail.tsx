@@ -6,7 +6,7 @@ import MenuPreview from '../components/MenuPreview';
 import styled from 'styled-components';
 import { Menu } from './MenuDetail';
 
-const StoreDetailContainer = styled.section`
+const Wrapper = styled.section`
   margin: auto;
   margin-top: ${(props) => props.theme.headerHeight};
   width: clamp(800px, 80%, 1640px);
@@ -228,7 +228,7 @@ const StoreDetail = () => {
   );
 
   return (
-    <StoreDetailContainer>
+    <Wrapper>
       <StoreDescription>
         <h1>Store: {store?.name}</h1>
         <p>주소: {store?.address}</p>
@@ -246,7 +246,7 @@ const StoreDetail = () => {
           );
         })}
       </MenusContainer>
-    </StoreDetailContainer>
+    </Wrapper>
   );
 };
 

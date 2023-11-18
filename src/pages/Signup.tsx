@@ -8,7 +8,7 @@ const baseURL: string = process.env.REACT_APP_BASE_URL as string;
 const httpClient = new HttpClient(baseURL);
 const authService = new AuthService(httpClient);
 
-const SignupPage = styled.div`
+const Wrapper = styled.div`
   background-color: ${(props) => props.theme.colors.bgColor};
   padding-top: 8px;
 
@@ -133,7 +133,7 @@ const Signup = () => {
 
   return (
     <>
-      <SignupPage>
+      <Wrapper>
         <SignupForm onSubmit={handleSubmit}>
           <h1>회원가입</h1>
 
@@ -183,7 +183,7 @@ const Signup = () => {
           </InputContainer>
           <button>회원가입</button>
         </SignupForm>
-      </SignupPage>
+      </Wrapper>
       <Banner text={text} isAlert={isAlert} />
     </>
   );

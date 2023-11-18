@@ -4,12 +4,11 @@ import Banner from '../components/Banner';
 import HttpClient from '../network/http';
 import AuthService from '../service/authService';
 
-
 const baseURL: string = process.env.REACT_APP_BASE_URL as string;
 const httpClient = new HttpClient(baseURL);
 const authService = new AuthService(httpClient);
 
-const LoginPage = styled.div`
+const Wrapper = styled.div`
   background-color: ${(props) => props.theme.colors.bgColor};
   padding-top: 8px;
 
@@ -113,7 +112,7 @@ const Login = () => {
 
   return (
     <>
-      <LoginPage>
+      <Wrapper>
         <LoginForm onSubmit={handleSubmit}>
           <h1>로그인</h1>
 
@@ -137,7 +136,7 @@ const Login = () => {
           </InputContainer>
           <button>로그인</button>
         </LoginForm>
-      </LoginPage>
+      </Wrapper>
       <Banner text={text} isAlert={isAlert} />
     </>
   );

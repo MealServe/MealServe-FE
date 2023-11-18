@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import StorePreview from '../components/StorePreview';
 
-const StoresContainer = styled.section`
+const Wrapper = styled.section`
   margin: auto;
   margin-top: ${(props) => props.theme.headerHeight};
 
@@ -140,7 +140,7 @@ const stores: Store[] = [
 
 const Home = () => {
   return (
-    <StoresContainer>
+    <Wrapper>
       {stores.map((store) => {
         return (
           <Link
@@ -151,7 +151,7 @@ const Home = () => {
           </Link>
         );
       })}
-    </StoresContainer>
+    </Wrapper>
   );
 };
 

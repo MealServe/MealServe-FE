@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const RegisterMenuPage = styled.div`
+const Wrapper = styled.div`
   background-color: ${(props) => props.theme.colors.bgColor};
   padding-top: 8px;
 
@@ -106,7 +106,7 @@ const InputContainer = styled.div`
 const RegisterMenu = () => {
   return (
     <>
-      <RegisterMenuPage>
+      <Wrapper>
         <RegisterForm>
           <h1>메뉴 등록하기</h1>
           <InputContainer>
@@ -120,7 +120,7 @@ const RegisterMenu = () => {
           </InputContainer>
           <button>등록</button>
         </RegisterForm>
-      </RegisterMenuPage>
+      </Wrapper>
     </>
   );
 };
