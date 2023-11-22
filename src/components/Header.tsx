@@ -2,7 +2,8 @@ import React from 'react';
 import NavBar from './NavBar';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { IoSearch } from 'react-icons/io5';
+import { useRecoilValue } from 'recoil';
+import { userEmailState } from '../recoil/atoms';
 
 const HeaderContainer = styled.header`
   position: fixed;
@@ -36,32 +37,38 @@ const TitleContainer = styled.div`
   }
 `;
 
-const SearchBar = styled.div`
-  display: flex;
-  align-items: center;
-  width: clamp(400px, 50%, 800px);
+const Welcome = styled.div`
+  font-size: 32px;
+  font-weight: bold;
 `;
 
-const SearchInput = styled.input`
-  height: 40px;
-  width: 90%;
-  font-size: 16px;
-  border-radius: 16px;
-  border: 1px solid ${(props) => props.theme.border.primaryBorder};
-  padding-left: 16px;
+// const SearchBar = styled.div`
+//   display: flex;
+//   align-items: center;
+//   width: clamp(400px, 50%, 800px);
+// `;
 
-  &:focus {
-    outline-color: ${(props) => props.theme.colors.primaryColor};
-  }
-`;
+// const SearchInput = styled.input`
+//   height: 40px;
+//   width: 90%;
+//   font-size: 16px;
+//   border-radius: 16px;
+//   border: 1px solid ${(props) => props.theme.border.primaryBorder};
+//   padding-left: 16px;
 
-const SearchBtn = styled.button`
-  width: 40px;
-  height: 40px;
-  font-size: 24px;
-`;
+//   &:focus {
+//     outline-color: ${(props) => props.theme.colors.primaryColor};
+//   }
+// `;
+
+// const SearchBtn = styled.button`
+//   width: 40px;
+//   height: 40px;
+//   font-size: 24px;
+// `;
 
 const Header = () => {
+  const email = useRecoilValue(userEmailState);
   return (
     <>
       <HeaderContainer>
@@ -71,13 +78,13 @@ const Header = () => {
             <h1>항해의 민족</h1>
           </Link>
         </TitleContainer>
-        <SearchBar>
+        {/* <SearchBar>
           <SearchInput></SearchInput>
           <SearchBtn>
             <IoSearch />
           </SearchBtn>
-        </SearchBar>
-
+        </SearchBar> */}
+        {email ? <Welcome>안녕하세요 {email}님</Welcome> : null}
         <NavBar />
       </HeaderContainer>
     </>

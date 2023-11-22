@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { userEmailState, userRoleState } from '../recoil/atoms';
+import cookie from 'react-cookies';
 
 const NavBarContainer = styled.nav``;
 
@@ -28,15 +31,22 @@ const Button = styled.button`
   }
 `;
 
-const authUrls = ['/login', '/signup'];
-
 const NavBar = () => {
-  const { pathname } = useLocation();
+  const userRole = useRecoilValue(userRoleState);
+  const setUserRoleState = useSetRecoilState(userRoleState);
+  const setUserEmailState = useSetRecoilState(userEmailState);
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setUserRoleState('');
+    setUserEmailState('');
+    cookie.remove('Authorization');
+  };
 
   return (
     <NavBarContainer>
       <NavList>
-        {authUrls.includes(pathname) || (
+        {!userRole ? null : (
           <>
             <li>
               <Link to="/stores/register">
@@ -48,22 +58,31 @@ const NavBar = () => {
                 <Button>메뉴 등록</Button>
               </Link>
             </li>
+            <li>
+              <Link to="/orders">
+                <Button>주문 관리</Button>
+              </Link>
+            </li>
+            <li>
+              <Button onClick={handleClick}>Logout</Button>
+            </li>
           </>
         )}
 
-        {pathname === '/login' || (
-          <li>
-            <Link to="/login">
-              <Button>Login</Button>
-            </Link>
-          </li>
-        )}
-        {pathname === '/signup' || (
-          <li>
-            <Link to="/signup">
-              <Button>가입하기</Button>
-            </Link>
-          </li>
+        {/* TODO: toggle 하는 방식으로 변경하기 */}
+        {userRole ? null : (
+          <>
+            <li>
+              <Link to="/login">
+                <Button>Login</Button>
+              </Link>
+            </li>
+            <li>
+              <Link to="/signup">
+                <Button>가입하기</Button>
+              </Link>
+            </li>
+          </>
         )}
       </NavList>
     </NavBarContainer>
