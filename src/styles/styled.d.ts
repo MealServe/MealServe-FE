@@ -18,6 +18,8 @@ declare module 'styled-components' {
       secondaryBorder: string;
       tertiaryBorder: string;
     };
+
+    defaultForm: string;
   }
 }
 

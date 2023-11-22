@@ -15,6 +15,27 @@ const theme: DefaultTheme = {
     secondaryBorder: '#2f364070',
     tertiaryBorder: '#2f364046',
   },
+
+  defaultForm: `
+    display: flex;
+    flex-direction: column;
+  
+    label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: bold;
+    }
+  
+    input {
+      height: 40px;
+      width: 400px;
+      font-size: 16px;
+      border-radius: 8px;
+      padding: 0 8px;
+      margin: 4px;
+    }
+  `,
 };
 
 export { theme };
