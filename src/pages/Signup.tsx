@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Banner from '../components/Banner';
-import HttpClient from '../network/http';
 import AuthService from '../service/authService';
-
-const baseURL: string = process.env.REACT_APP_BASE_URL as string;
-const httpClient = new HttpClient(baseURL);
-const authService = new AuthService(httpClient);
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
   background-color: ${(props) => props.theme.colors.bgColor};
@@ -21,7 +17,7 @@ const Wrapper = styled.div`
 `;
 
 const SignupForm = styled.form`
-  height: clamp(400px, 50%, 560px);
+  height: clamp(400px, 50%, 480px);
   width: clamp(440px, 60%, 520px);
   border-radius: ${(props) => props.theme.border.borderRadius};
   border: 2px solid ${(props) => props.theme.colors.primaryColor};
@@ -64,20 +60,13 @@ const SignupForm = styled.form`
 `;
 
 const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${(props) => props.theme.defaultForm};
 
   input {
-    height: 40px;
-    width: 400px;
-    font-size: 16px;
-    border-radius: 8px;
     border: 1px solid ${(props) => props.theme.border.primaryBorder};
-    padding: 0 8px;
-    margin: 4px;
-    &:focus {
-      outline-color: ${(props) => props.theme.colors.primaryColor};
-    }
+  }
+  input:focus {
+    outline-color: ${(props) => props.theme.colors.primaryColor};
   }
 
   input[type='checkbox'] {
@@ -88,14 +77,19 @@ const InputContainer = styled.div`
   }
 `;
 
-const Signup = () => {
+interface SignupProps {
+  authService: AuthService;
+}
+
+const Signup: React.FC<SignupProps> = ({ authService }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [isOwner, setIsOwner] = useState<boolean>(false);
-  const [text, setText] = useState('');
-  const [isAlert, setIsAlert] = useState(false);
+  const [text, setText] = useState<string>('');
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target as HTMLInputElement;
@@ -123,7 +117,12 @@ const Signup = () => {
     e.preventDefault();
     authService
       .signup(email, password, address, phone, isOwner)
-      .catch(setError);
+      .then(() => {
+        navigate('/login');
+      })
+      .catch((e) => {
+        setError(e);
+      });
   };
 
   const setError = (error: Error) => {
@@ -138,53 +137,64 @@ const Signup = () => {
           <h1>회원가입</h1>
 
           <InputContainer>
-            <input
-              name="email"
-              type="email"
-              value={email}
-              onChange={handleChange}
-              placeholder="이메일를 입력하세요"
-              required
-            />
-            <input
-              name="password"
-              type="password"
-              value={password}
-              onChange={handleChange}
-              placeholder="비밀번호를 입력하세요"
-              required
-            />
-            <input
-              name="address"
-              type="text"
-              value={address}
-              onChange={handleChange}
-              placeholder="주소를 입력하세요"
-              required
-            />
-            <input
-              name="phone"
-              type="text"
-              value={phone}
-              onChange={handleChange}
-              placeholder="전화번호를 입력하세요"
-              required
-            />
-            <div>
+            <label>
+              <p>이메일: </p>
+              <input
+                name="email"
+                type="email"
+                value={email}
+                onChange={handleChange}
+                placeholder="이메일를 입력하세요"
+                required
+              />
+            </label>
+            <label>
+              <p>비밀번호: </p>
+              <input
+                name="password"
+                type="password"
+                value={password}
+                onChange={handleChange}
+                placeholder="비밀번호를 입력하세요"
+                required
+              />
+            </label>
+            <label>
+              <p>주소: </p>
+              <input
+                name="address"
+                type="text"
+                value={address}
+                onChange={handleChange}
+                placeholder="주소를 입력하세요"
+                required
+              />
+            </label>
+            <label>
+              <p>전화번호: </p>
+              <input
+                name="phone"
+                type="text"
+                value={phone}
+                onChange={handleChange}
+                placeholder="전화번호를 입력하세요"
+                required
+              />
+            </label>
+            <label>
+              사장님으로 가입하기
               <input
                 name="isOwner"
                 type="checkbox"
                 checked={isOwner}
                 onChange={handleChange}
-                id="isOwner"
               />
-              <label htmlFor="isOwner">사장님으로 가입하기</label>
-            </div>
+            </label>
           </InputContainer>
           <button>회원가입</button>
+          <Banner text={text} isAlert={isAlert} />
         </SignupForm>
       </Wrapper>
-      <Banner text={text} isAlert={isAlert} />
     </>
   );
 };

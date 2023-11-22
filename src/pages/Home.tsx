@@ -1,8 +1,11 @@
-import React from 'react';
-import Store from '../components/StorePreview';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import StorePreview from '../components/StorePreview';
+import StoreService from '../service/storeService';
+import { Menu } from './MenuDetail';
+import { useRecoilValue } from 'recoil';
+import { userRoleState } from '../recoil/atoms';
 
 const Wrapper = styled.section`
   margin: auto;
@@ -18,127 +21,25 @@ export interface Store {
   id: number;
   name: string;
   address: string;
+  menus?: Menu[];
 }
 
-const stores: Store[] = [
-  {
-    id: 1,
-    name: '배민',
-    address: '서울',
-  },
-  {
-    id: 2,
-    name: '굽네치킨',
-    address: '서울',
-  },
-  {
-    id: 3,
-    name: '해운대맛집',
-    address: '부산',
-  },
-  {
-    id: 4,
-    name: '배민',
-    address: '서울',
-  },
-  {
-    id: 5,
-    name: '굽네치킨',
-    address: '서울',
-  },
-  {
-    id: 6,
-    name: '해운대맛집',
-    address: '부산',
-  },
-  {
-    id: 7,
-    name: '배민',
-    address: '서울',
-  },
-  {
-    id: 8,
-    name: '굽네치킨',
-    address: '서울',
-  },
-  {
-    id: 9,
-    name: '해운대맛집',
-    address: '부산',
-  },
-  {
-    id: 10,
-    name: '배민',
-    address: '서울',
-  },
-  {
-    id: 11,
-    name: '굽네치킨',
-    address: '서울',
-  },
-  {
-    id: 12,
-    name: '해운대맛집',
-    address: '부산',
-  },
-  {
-    id: 1,
-    name: '배민',
-    address: '서울',
-  },
-  {
-    id: 2,
-    name: '굽네치킨',
-    address: '서울',
-  },
-  {
-    id: 3,
-    name: '해운대맛집',
-    address: '부산',
-  },
-  {
-    id: 4,
-    name: '배민',
-    address: '서울',
-  },
-  {
-    id: 5,
-    name: '굽네치킨',
-    address: '서울',
-  },
-  {
-    id: 6,
-    name: '해운대맛집',
-    address: '부산',
-  },
-  {
-    id: 7,
-    name: '배민',
-    address: '서울',
-  },
-  {
-    id: 8,
-    name: '굽네치킨',
-    address: '서울',
-  },
-  {
-    id: 9,
-    name: '해운대맛집',
-    address: '부산',
-  },
-  {
-    id: 10,
-    name: '배민',
-    address: '서울',
-  },
-  {
-    id: 11,
-    name: '굽네치킨',
-    address: '서울',
-  },
-];
+interface HomeProps {
+  storeService: StoreService;
+}
 
-const Home = () => {
+const Home: React.FC<HomeProps> = ({ storeService }) => {
+  const [stores, setStores] = useState<Store[]>([]);
+
+  useEffect(() => {
+    storeService.getStores().then((stores) => {
+      // console.log(stores);
+      setStores(stores.content);
+    });
+  }, []);
+  const userRole = useRecoilValue(userRoleState);
+  console.log('role', userRole);
+
   return (
     <Wrapper>
       {stores.map((store) => {
@@ -147,7 +48,7 @@ const Home = () => {
             key={`${store.name}${store.address}`}
             to={`/stores/${store.id}`}
           >
-            <StorePreview />
+            <StorePreview store={store} />
           </Link>
         );
       })}

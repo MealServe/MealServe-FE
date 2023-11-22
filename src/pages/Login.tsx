@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Banner from '../components/Banner';
-import HttpClient from '../network/http';
 import AuthService from '../service/authService';
-
-const baseURL: string = process.env.REACT_APP_BASE_URL as string;
-const httpClient = new HttpClient(baseURL);
-const authService = new AuthService(httpClient);
+import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { userEmailState, userRoleState } from '../recoil/atoms';
 
 const Wrapper = styled.div`
   background-color: ${(props) => props.theme.colors.bgColor};
@@ -63,29 +61,28 @@ const LoginForm = styled.form`
 `;
 
 const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${(props) => props.theme.defaultForm};
 
   input {
-    height: 40px;
-    width: 400px;
-    font-size: 16px;
-    border-radius: 8px;
     border: 1px solid ${(props) => props.theme.border.primaryBorder};
-    padding: 0 8px;
-    margin: 4px;
-
-    &:focus {
-      outline-color: ${(props) => props.theme.colors.primaryColor};
-    }
+  }
+  input:focus {
+    outline-color: ${(props) => props.theme.colors.primaryColor};
   }
 `;
 
-const Login = () => {
+interface LoginProps {
+  authService: AuthService;
+}
+
+const Login: React.FC<LoginProps> = ({ authService }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [text, setText] = useState('');
-  const [isAlert, setIsAlert] = useState(false);
+  const [text, setText] = useState<string>('');
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const setUserRoleState = useSetRecoilState(userRoleState);
+  const setUserEmailState = useSetRecoilState(userEmailState);
 
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { name, value } = e.target as HTMLInputElement;
@@ -102,7 +99,14 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    authService.login(email, password).catch(setError);
+    authService
+      .login(email, password)
+      .then((result) => {
+        setUserRoleState(result.role);
+        setUserEmailState(result.email);
+        navigate('/');
+      })
+      .catch(setError);
   };
 
   const setError = (error: Error) => {
@@ -117,27 +121,33 @@ const Login = () => {
           <h1>로그인</h1>
 
           <InputContainer>
-            <input
-              name="email"
-              type="email"
-              value={email}
-              onChange={handleChange}
-              placeholder="이메일를 입력하세요"
-              required
-            />
-            <input
-              name="password"
-              type="password"
-              value={password}
-              onChange={handleChange}
-              placeholder="비밀번호를 입력하세요"
-              required
-            />
+            <label>
+              <p>이메일: </p>
+              <input
+                name="email"
+                type="email"
+                value={email}
+                onChange={handleChange}
+                placeholder="이메일를 입력하세요"
+                required
+              />
+            </label>
+            <label>
+              <p>비밀번호: </p>
+              <input
+                name="password"
+                type="password"
+                value={password}
+                onChange={handleChange}
+                placeholder="비밀번호를 입력하세요"
+                required
+              />
+            </label>
           </InputContainer>
           <button>로그인</button>
+          <Banner text={text} isAlert={isAlert} />
         </LoginForm>
       </Wrapper>
-      <Banner text={text} isAlert={isAlert} />
     </>
   );
 };

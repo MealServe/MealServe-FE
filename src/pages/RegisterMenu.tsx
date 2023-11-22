@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import StoreService from '../service/storeService';
 
 const Wrapper = styled.div`
   background-color: ${(props) => props.theme.colors.bgColor};
@@ -57,66 +58,91 @@ const RegisterForm = styled.form`
 `;
 
 const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  ${(props) => props.theme.defaultForm};
 
   input {
-    height: 40px;
-    width: 400px;
-    font-size: 16px;
-    border-radius: 8px;
     border: 1px solid ${(props) => props.theme.border.primaryBorder};
-    padding: 0 8px;
-    margin: 4px;
-    &:focus {
-      outline-color: ${(props) => props.theme.colors.primaryColor};
-    }
   }
-
-  label {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-
-  label p {
-    display: inline-block;
-    padding: 10px 20px;
-    color: #fff;
-    vertical-align: middle;
-    background-color: #999999;
-    cursor: pointer;
-    height: 40px;
-    margin-left: 10px;
-    border-radius: ${(props) => props.theme.border.borderRadius};
+  input:focus {
+    outline-color: ${(props) => props.theme.colors.primaryColor};
   }
 
   input[type='file'] {
-    position: absolute;
-    width: 0;
-    height: 0;
-    padding: 0;
+    width: auto;
+    height: auto;
     overflow: hidden;
-    border: 0;
+    border: none;
   }
 `;
 
-const RegisterMenu = () => {
+interface RegisterMenuProps {
+  storeService: StoreService;
+}
+
+const RegisterMenu: React.FC<RegisterMenuProps> = ({ storeService }) => {
+  const [name, setName] = useState<string>('');
+  const [price, setPrice] = useState<number>(0);
+  const [file, setFile] = useState<File>();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    storeService.addMenu(name, price, file);
+  };
+
+  const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const { name, value, files } = e.target as HTMLInputElement;
+    console.log(e);
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+      case 'price':
+        setPrice(Number(value));
+        break;
+      case 'file':
+        if (files === null) {
+          break;
+        }
+        setFile(files[0]);
+        break;
+      default:
+    }
+  };
   return (
     <>
       <Wrapper>
-        <RegisterForm>
+        <RegisterForm onSubmit={handleSubmit}>
           <h1>메뉴 등록하기</h1>
           <InputContainer>
-            <input type="text" placeholder="메뉴 이름을 입력하세요" required />
-            <input type="number" placeholder="가격를 입력하세요" required />
-            <label htmlFor="file">
-              <input value="첨부파일" placeholder="첨부파일"></input>
-              <p>이미지 찾기</p>
+            <label>
+              <p>메뉴 이름:</p>
+              <input
+                name="name"
+                type="text"
+                value={name}
+                onChange={handleChange}
+                placeholder="메뉴 이름을 입력하세요"
+                required
+              />
             </label>
-            <input type="file" id="file" accept="image/*" />
+            <label>
+              <p>가격: </p>
+              <input
+                name="price"
+                type="number"
+                value={price}
+                onChange={handleChange}
+                placeholder="가격를 입력하세요"
+                required
+              />
+            </label>
+            <input
+              name="file"
+              type="file"
+              onChange={handleChange}
+              id="file"
+              accept="image/*"
+            />
           </InputContainer>
           <button>등록</button>
         </RegisterForm>

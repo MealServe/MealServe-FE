@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import StoreService from '../service/storeService';
+import Banner from '../components/Banner';
 
 const Wrapper = styled.div`
   background-color: ${(props) => props.theme.colors.bgColor};
@@ -57,20 +59,15 @@ const RegisterForm = styled.form`
 `;
 
 const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${(props) => props.theme.defaultForm};
 
   input {
-    height: 40px;
-    width: 400px;
-    font-size: 16px;
-    border-radius: 8px;
+    width: 360px;
+
     border: 1px solid ${(props) => props.theme.border.primaryBorder};
-    padding: 0 8px;
-    margin: 4px;
-    &:focus {
-      outline-color: ${(props) => props.theme.colors.primaryColor};
-    }
+  }
+  input:focus {
+    outline-color: ${(props) => props.theme.colors.primaryColor};
   }
 
   input[type='checkbox'] {
@@ -81,22 +78,85 @@ const InputContainer = styled.div`
   }
 `;
 
-const RegisterStore = () => {
+interface RegisterStoreProps {
+  storeService: StoreService;
+}
+
+const RegisterStore: React.FC<RegisterStoreProps> = ({ storeService }) => {
+  const [name, setName] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const [tel, setTel] = useState<string>('');
+  const [text, setText] = useState<string>('');
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    storeService.addStore(name, address, tel).catch(setError);
+  };
+
+  const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const { name, value } = e.target as HTMLInputElement;
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+      case 'address':
+        setAddress(value);
+        break;
+      case 'tel':
+        setTel(value);
+        break;
+      default:
+    }
+  };
+
+  const setError = (error: Error) => {
+    setText(error.toString());
+    setIsAlert(true);
+  };
+
   return (
     <>
       <Wrapper>
-        <RegisterForm>
+        <RegisterForm onSubmit={handleSubmit}>
           <h1>업장 등록하기</h1>
           <InputContainer>
-            <input type="text" placeholder="업장 이름을 입력하세요" required />
-            <input type="text" placeholder="주소를 입력하세요" required />
-            <input
-              type="text"
-              placeholder="업장 전화번호를 입력하세요"
-              required
-            />
+            <label>
+              <p>업장 이름: </p>
+              <input
+                name="name"
+                type="text"
+                value={name}
+                onChange={handleChange}
+                placeholder="업장 이름을 입력하세요"
+                required
+              />
+            </label>
+            <label>
+              <p>주소: </p>
+              <input
+                name="address"
+                type="text"
+                value={address}
+                onChange={handleChange}
+                placeholder="주소를 입력하세요"
+                required
+              />
+            </label>
+            <label>
+              <p>업장 전화번호: </p>
+              <input
+                name="tel"
+                type="text"
+                value={tel}
+                onChange={handleChange}
+                placeholder="업장 전화번호를 입력하세요"
+                required
+              />
+            </label>
           </InputContainer>
           <button>등록</button>
+          <Banner text={text} isAlert={isAlert} />
         </RegisterForm>
       </Wrapper>
     </>
