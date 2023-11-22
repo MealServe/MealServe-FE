@@ -2,7 +2,7 @@ interface Options {
   method: string;
   // TODO: 이거 수정하기
   headers?: object;
-  body?: string;
+  body?: string | FormData;
 }
 
 export default class HttpClient {
@@ -11,6 +11,7 @@ export default class HttpClient {
   async fetch(url: string, options: Options) {
     const response = await fetch(`${this.baseURL}${url}`, {
       ...options,
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         ...options.headers,
@@ -21,7 +22,7 @@ export default class HttpClient {
     try {
       data = await response.json();
     } catch (error) {
-      console.error(error); // SyntaxError: Unexpected end of JSON input at HttpClient.fetch
+      // console.error(error); // SyntaxError: Unexpected end of JSON input at HttpClient.fetch
     }
 
     if (response.status < 200 || response.status > 299) {
@@ -30,6 +31,7 @@ export default class HttpClient {
       throw new Error(message);
     }
 
+    // console.log(data);
     return data;
   }
 }
