@@ -46,7 +46,7 @@ const NavBar = () => {
   return (
     <NavBarContainer>
       <NavList>
-        {!userRole ? null : (
+        {userRole !== 'OWNER' ? null : (
           <>
             <li>
               <Link to="/stores/register">
@@ -63,14 +63,15 @@ const NavBar = () => {
                 <Button>주문 관리</Button>
               </Link>
             </li>
-            <li>
-              <Button onClick={handleClick}>Logout</Button>
-            </li>
           </>
         )}
 
         {/* TODO: toggle 하는 방식으로 변경하기 */}
-        {userRole ? null : (
+        {userRole ? (
+          <li>
+            <Button onClick={handleClick}>Logout</Button>
+          </li>
+        ) : (
           <>
             <li>
               <Link to="/login">
