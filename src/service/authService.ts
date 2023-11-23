@@ -19,6 +19,9 @@ export default class AuthService {
         phone,
         isOwner,
       }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   }
 

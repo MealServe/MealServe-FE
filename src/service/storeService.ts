@@ -24,6 +24,9 @@ export default class StoreService {
         address,
         tel,
       }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   }
 
@@ -54,16 +57,24 @@ export default class StoreService {
   // 메뉴 정보 등록
   async addMenu(name: string, price: number, image?: File) {
     const formData = new FormData();
-    formData.append('name', name);
-    formData.append('price', price.toString());
+    // formData.append('name', name);
+    // formData.append('price', price.toString());
+
+    const menu = {
+      name,
+      price,
+    };
+    const blob = new Blob([JSON.stringify(menu)], { type: 'application/json' });
+    formData.append('menu', blob);
     if (image) {
       formData.append('image', image);
     }
-    return this.http.fetch('/stores/munus', {
+    // for (let value of formData.values()) {
+    //   console.log(value);
+    // }
+    return this.http.fetch('/stores/menus', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+      headers: {},
       body: formData,
     });
   }
@@ -75,7 +86,7 @@ export default class StoreService {
     if (image) {
       formData.append('image', image);
     }
-    return this.http.fetch(`/stores/munus/${menuId}`, {
+    return this.http.fetch(`/stores/menus/${menuId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -86,7 +97,7 @@ export default class StoreService {
 
   // 메뉴 정보 삭제
   async deleteMenu(menuId: string) {
-    return this.http.fetch(`/stores/munus/${menuId}`, {
+    return this.http.fetch(`/stores/menus/${menuId}`, {
       method: 'DELETE',
     });
   }
