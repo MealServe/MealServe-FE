@@ -63,14 +63,14 @@ export interface Menu {
   id: number;
   name: string;
   price: number;
-  imageUrl: string;
+  image: string;
 }
 
 const menu: Menu = {
   id: 1,
   name: '후라이드 치킨',
   price: 20000,
-  imageUrl: '/chicken.jpg',
+  image: '/chicken.jpg',
 };
 
 const MenuDetail = () => {
@@ -87,7 +87,7 @@ const MenuDetail = () => {
     <Wrapper>
       <MenuDescription>
         <h2>{menu.name}</h2>
-        <img src={menu.imageUrl} alt="" />
+        <img src={menu.image} alt="" />
       </MenuDescription>
       <OrderSection>
         <h3>주문하기</h3>
