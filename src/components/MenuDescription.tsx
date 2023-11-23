@@ -39,13 +39,13 @@ const MenuDescription: React.FC<MenuDescriptionProps> = ({
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const current = e.target as HTMLInputElement;
     const { name, value, checked } = current;
-    console.log(current.parentElement?.parentNode);
-    console.log(checked);
+    // console.log(current.parentElement?.parentNode);
+    // console.log(checked);
   };
 
   return (
     <MenuContainer>
-      <MenuImage src={`${menu.imageUrl || '/images.jfif'}`} alt="" />
+      <MenuImage src={`${menu.image || '/images.jfif'}`} alt="" />
       <MenuDetail>
         <p>{menu.name}</p>
         <p>{menu.price}원</p>

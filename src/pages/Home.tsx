@@ -38,7 +38,7 @@ const Home: React.FC<HomeProps> = ({ storeService }) => {
     });
   }, []);
   const userRole = useRecoilValue(userRoleState);
-  console.log('role', userRole);
+  // console.log('role', userRole);
 
   return (
     <Wrapper>
