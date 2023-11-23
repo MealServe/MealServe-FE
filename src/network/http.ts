@@ -14,6 +14,7 @@ export default class HttpClient {
       credentials: 'include',
       headers: {
         // 'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': `${process.env.REACT_APP_BASE_URL}`,
         ...options.headers,
       },
     });
