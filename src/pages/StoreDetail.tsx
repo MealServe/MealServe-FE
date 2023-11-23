@@ -198,7 +198,7 @@ const StoreDetail = () => {
             min="1"
           /> */}
             {/* <p>총가격: {total}원</p> */}
-            <OrderButton>장바구니 추가</OrderButton>
+            <OrderButton>주문하기</OrderButton>
           </form>
         </OrderSection>
       </MainContainer>

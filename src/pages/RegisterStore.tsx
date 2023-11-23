@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import StoreService from '../service/storeService';
 import Banner from '../components/Banner';
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
   background-color: ${(props) => props.theme.colors.bgColor};
@@ -88,10 +89,17 @@ const RegisterStore: React.FC<RegisterStoreProps> = ({ storeService }) => {
   const [tel, setTel] = useState<string>('');
   const [text, setText] = useState<string>('');
   const [isAlert, setIsAlert] = useState<boolean>(false);
+  const navigate = useNavigate();
+
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    storeService.addStore(name, address, tel).catch(setError);
+    storeService
+      .addStore(name, address, tel)
+      .then((result) => {
+        navigate('/');
+      })
+      .catch(setError);
   };
 
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import StoreService from '../service/storeService';
+import { useNavigate } from 'react-router-dom';
+import Banner from '../components/Banner';
 
 const Wrapper = styled.div`
   background-color: ${(props) => props.theme.colors.bgColor};
@@ -83,15 +85,27 @@ const RegisterMenu: React.FC<RegisterMenuProps> = ({ storeService }) => {
   const [name, setName] = useState<string>('');
   const [price, setPrice] = useState<number>(0);
   const [file, setFile] = useState<File>();
+  const [text, setText] = useState<string>('');
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    storeService.addMenu(name, price, file);
+    storeService
+      .addMenu(name, price, file)
+      .then((result) => {
+        navigate('/');
+      })
+      .catch(setError);
+  };
+
+  const setError = (error: Error) => {
+    setText(error.toString());
+    setIsAlert(true);
   };
 
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target as HTMLInputElement;
-    console.log(e);
     switch (name) {
       case 'name':
         setName(value);
@@ -129,7 +143,7 @@ const RegisterMenu: React.FC<RegisterMenuProps> = ({ storeService }) => {
               <p>가격: </p>
               <input
                 name="price"
-                type="number"
+                type="text"
                 value={price}
                 onChange={handleChange}
                 placeholder="가격를 입력하세요"
@@ -145,6 +159,7 @@ const RegisterMenu: React.FC<RegisterMenuProps> = ({ storeService }) => {
             />
           </InputContainer>
           <button>등록</button>
+          <Banner text={text} isAlert={isAlert} />
         </RegisterForm>
       </Wrapper>
     </>
