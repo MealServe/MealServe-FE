@@ -162,15 +162,13 @@ interface OrderProps {
 }
 
 const Orders: React.FC<OrderProps> = ({storeService}) => {
-  const [orders, setOrders] = useState<IOrder[]>([])
+  const [orders, setOrders] = useState<IOrder[]>([]);
 
   useEffect(() => {
     storeService.getOrders().then((orders) => {
       setOrders(orders);
-    })
-  
-  }, [orders])
-  
+    });
+  }, []);
 
   return (
     <Wrapper>
