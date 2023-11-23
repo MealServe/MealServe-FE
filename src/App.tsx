@@ -37,7 +37,7 @@ function App() {
           element={<RegisterMenu storeService={storeService} />}
         />
         {/* <Route path="/stores/:storeId/menus/:menuId" element={<MenuDetail />} /> */}
-        <Route path="/orders" element={<Orders />} />
+        <Route path="/orders" element={<Orders storeService={storeService}/>} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
