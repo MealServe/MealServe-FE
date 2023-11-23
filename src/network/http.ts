@@ -13,7 +13,7 @@ export default class HttpClient {
       ...options,
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json',
+        // 'Content-Type': 'application/json',
         ...options.headers,
       },
     });
